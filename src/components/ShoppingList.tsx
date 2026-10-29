@@ -1,18 +1,24 @@
 import { useState } from 'react'
 import { plantList } from '../datas/plantList'
-import PlantItem from './ui/PlantItem'
-import Categories from './Categories'
+import type { CartItem } from "../types";
+import PlantItem from './ui/PlantItem.tsx'
+import Categories from './Categories.tsx'
 import '../styles/ShoppingList.css'
 
-function ShoppingList({ cart, addToCart }) {
+type ShoppingListProps = {
+  cart: CartItem[];
+  addToCart: (plant: { name: string; price: number }) => void;
+};
+
+function ShoppingList({ addToCart }: ShoppingListProps) {
 	const [activeCategory, setActiveCategory] = useState('')
-	const categories = plantList.reduce(
+	const categories = plantList.reduce<string[]>(
 		(acc, plant) =>
 			acc.includes(plant.category) ? acc : acc.concat(plant.category),
 		[]
 	)
 
-	const handleAddToCart = (name, price) => {
+	const handleAddToCart = (name: string, price: number) => {
 		addToCart({ name, price })
 	}
 

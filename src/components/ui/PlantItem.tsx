@@ -1,11 +1,21 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
+import type { MouseEvent } from "react";
 import '../../styles/PlantItem.css'
 
-function PlantItem({ cover, name, price, id, onAddToCart }) {
+type PlantItemProps = {
+  cover: string;
+  name: string;
+  price: number;
+  id: string;
+  water: number;
+  light: number;
+  onAddToCart: () => void;
+};
+function PlantItem({ cover, name, price, id, onAddToCart }: PlantItemProps) {
 	const [showAnimation, setShowAnimation] = useState(false)
 
-	const handleAddToCart = (e) => {
+	const handleAddToCart = (e: MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault()
 		onAddToCart()
 		setShowAnimation(true)

@@ -1,9 +1,15 @@
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { plantList } from '../datas/plantList'
+import type { CartItem } from "../types";
 import CareScale from '../components/ui/CareScale'
 import '../styles/PlantDetailPage.css'
 
-function PlantDetailPage({ cart, addToCart }) {
+type PlantDetailPageProps = {
+  cart: CartItem[];
+  addToCart: (plant: { name: string; price: number }) => void;
+};
+
+function PlantDetailPage({ addToCart }: PlantDetailPageProps) {
 	const { id } = useParams()
 	const navigate = useNavigate()
 	
@@ -18,8 +24,8 @@ function PlantDetailPage({ cart, addToCart }) {
 		addToCart(plant)
 	}
 	
-	const getCategoryLabel = (category) => {
-		const labels = {
+	const getCategoryLabel = (category: string) => {
+  		const labels: { [key: string]: string } = {
 			'classique': 'Plantes classiques',
 			'extérieur': 'Plantes d\'extérieur',
 			'plante grasse': 'Plantes grasses'

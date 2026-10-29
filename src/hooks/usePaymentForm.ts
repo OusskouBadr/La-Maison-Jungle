@@ -1,15 +1,23 @@
 import { useState } from "react";
+import type { PaymentFormData } from "../types";
+
+type PaymentFormErrors = {
+  cardNumber?: string | null;
+  expiryDate?: string | null;
+  cvv?: string | null;
+  cardholderName?: string | null;
+};
 
 export const usePaymentForm = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<PaymentFormData>({
     cardNumber: "",
     expiryDate: "",
     cvv: "",
     cardholderName: "",
   });
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<PaymentFormErrors>({});
 
-  const updateField = (name, value) => {
+  const updateField = (name: keyof PaymentFormData, value: string) => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -24,16 +32,16 @@ export const usePaymentForm = () => {
     }
   };
 
-  const validateField = (name, value) => {
+  const validateField = (name: keyof PaymentFormData, value: string) => {
     switch (name) {
-      case "cardNumber":
+      case "cardNumber": {
         const cleanCardNumber = value.replace(/\s/g, "");
         if (!cleanCardNumber.match(/^\d{13,19}$/)) {
           return "Numéro de carte invalide";
         }
         break;
-
-      case "expiryDate":
+      }
+      case "expiryDate": {
         if (!value.match(/^\d{2}\/\d{2}$/)) {
           return "Format de date invalide (MM/AA)";
         }
@@ -45,14 +53,14 @@ export const usePaymentForm = () => {
           return "Carte expirée";
         }
         break;
-
+      }
       case "cvv":
         if (!value.match(/^\d{3,4}$/)) {
           return "Code de sécurité invalide";
         }
         break;
 
-      case "cardholderName":
+      case "cardholderName": {
         if (!value.trim()) {
           return "Nom du titulaire requis";
         }
@@ -60,7 +68,7 @@ export const usePaymentForm = () => {
           return "Nom trop court";
         }
         break;
-
+      }
       default:
         return null;
     }
@@ -68,10 +76,11 @@ export const usePaymentForm = () => {
   };
 
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors: PaymentFormErrors = {};
     let isValid = true;
 
-    Object.keys(formData).forEach((fieldName) => {
+    const fieldNames = Object.keys(formData) as (keyof PaymentFormData)[];
+    fieldNames.forEach((fieldName) => {
       const error = validateField(fieldName, formData[fieldName]);
       if (error) {
         newErrors[fieldName] = error;
@@ -83,7 +92,7 @@ export const usePaymentForm = () => {
     return isValid;
   };
 
-  const formatCardNumber = (value) => {
+  const formatCardNumber = (value: string) => {
     const v = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
     const matches = v.match(/\d{4,16}/g);
     const match = (matches && matches[0]) || "";
@@ -98,7 +107,7 @@ export const usePaymentForm = () => {
     }
   };
 
-  const formatExpiryDate = (value) => {
+  const formatExpiryDate = (value: string) => {
     const v = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
     if (v.length >= 2) {
       return v.substring(0, 2) + "/" + v.substring(2, 4);

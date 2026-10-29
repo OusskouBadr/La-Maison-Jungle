@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { useCart } from '../hooks/useCart'
 import Banner from './layout/Banner'
-import HomePage from '../pages/HomePage'
-import CartPage from '../pages/CartPage'
-import PlantDetailPage from '../pages/PlantDetailPage'
-import NotFoundPage from '../pages/NotFoundPage'
+import HomePage from '../pages/HomePage.tsx'
+import CartPage from '../pages/CartPage.tsx'
+import PlantDetailPage from '../pages/PlantDetailPage.tsx'
+import NotFoundPage from '../pages/NotFoundPage.tsx'
 
 function App() {
-	const { cart, addToCart, removeFromCart, updateQuantity, clearCart, getTotal, getItemCount } = useCart()
+	const { cart, addToCart, updateQuantity, clearCart } = useCart()
 
 	return (
 		<Router>
